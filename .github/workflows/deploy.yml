@@ -1,1 +1,61 @@
+name: Deploy Contract
 
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: 'Network to deploy to'
+        required: true
+        type: choice
+        options:
+          - sepolia
+          - zama
+      verify:
+        description: 'Verify contract on Etherscan'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.network }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Deploy contract
+        run: npm run deploy:${{ inputs.network }}
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+
+      - name: Verify contract
+        if: inputs.verify && inputs.network == 'sepolia'
+        run: npm run verify
+        env:
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        continue-on-error: true
+
+      - name: Upload deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-${{ inputs.network }}-${{ github.sha }}
+          path: |
+            deployments/
+            artifacts/
+          retention-days: 30
