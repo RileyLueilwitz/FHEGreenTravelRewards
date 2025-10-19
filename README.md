@@ -1,333 +1,357 @@
-# 🔐 Private Green Travel Rewards
+# 🔐 Universal FHEVM SDK + Private Green Travel Rewards
 
-> Privacy-preserving eco-friendly transportation incentives powered by Zama FHEVM
+> **Framework-agnostic SDK for building privacy-preserving dApps with Fully Homomorphic Encryption**
+>
+> Demonstrating real-world FHE applications through an anonymous green travel rewards system
 
-[![Live Demo](https://img.shields.io/badge/🌐-Live%20Demo-brightgreen)](https://your-demo-url.vercel.app)
-[![License: MIT](https://img.shields.io/badge/📄-License-MIT-yellow.svg)](LICENSE)
-[![Hardhat](https://img.shields.io/badge/Built%20with-Hardhat-yellow)](https://hardhat.org/)
-[![Tests](https://img.shields.io/badge/Tests-54%20Passing-success)](./TESTING.md)
-[![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen)](./TESTING.md)
-[![Security](https://img.shields.io/badge/Security-A+-success)](./SECURITY_PERFORMANCE.md)
-
-Anonymous rewards system for sustainable travel using **Fully Homomorphic Encryption (FHE)** - submit carbon savings privately, earn rewards publicly. Built for the **Zama FHE Challenge** demonstrating real-world privacy-preserving applications.
+[![Live Demo](https://img.shields.io/badge/🌐-Live%20Demo-brightgreen)](https://fhe-green-travel-rewards.vercel.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/RileyLueilwitz/FHEGreenTravelRewards)
+[![SDK](https://img.shields.io/badge/SDK-Universal-orange)]()
 
 ---
 
-## ✨ Features
+## 📹 Demo Video
 
-- 🔐 **Complete Privacy** - Carbon savings encrypted with Zama FHEVM, never exposed on-chain
-- 🏆 **Tiered Rewards** - Bronze/Silver/Gold levels based on encrypted carbon reduction data
-- ⏱️ **Weekly Periods** - Automated 7-day reward cycles with homomorphic computation
-- 🔄 **Zero-Knowledge Processing** - Rewards calculated on encrypted data without decryption
-- 💰 **Instant Claims** - Users withdraw accumulated rewards anytime
-- 🌐 **Testnet Ready** - Deployed on Sepolia with verified contracts
+**Download and watch the demonstration video:** `demo.mp4` (located in this repository)
+
+*Note: The video file must be downloaded to view. It demonstrates the complete SDK integration and the Private Green Travel Rewards application.*
+
+**Video Contents:**
+- Universal FHEVM SDK architecture and features
+- Quick integration guide (less than 10 lines of code)
+- React and Next.js examples walkthrough
+- Private Green Travel Rewards dApp demonstration
+- Privacy-preserving carbon tracking in action
+
+---
+
+## 🌟 Project Overview
+
+This project consists of two main components:
+
+### 1. Universal FHEVM SDK
+
+A **framework-agnostic SDK** that simplifies building confidential frontends with Zama's FHEVM technology. Inspired by wagmi's developer experience, the SDK provides:
+
+- ✅ **Single Package** - All FHEVM dependencies wrapped
+- ✅ **Intuitive API** - React hooks, core functions, utilities
+- ✅ **Framework Agnostic** - Works with React, Vue, Next.js, Node.js
+- ✅ **Quick Setup** - Less than 10 lines to integrate
+- ✅ **Type Safe** - Full TypeScript support
+- ✅ **Production Ready** - Comprehensive testing and documentation
+
+### 2. Private Green Travel Rewards (Demo Application)
+
+A **real-world example dApp** demonstrating SDK capabilities through an anonymous rewards system for sustainable transportation:
+
+- 🔐 **Complete Privacy** - Carbon savings encrypted with FHE
+- 🏆 **Tiered Rewards** - Bronze/Silver/Gold based on encrypted data
+- ⏱️ **Weekly Periods** - Automated reward cycles
+- 🔄 **Zero-Knowledge Processing** - Rewards calculated without decryption
+- 💰 **Instant Claims** - Users withdraw accumulated tokens
 - 🧪 **Production-Grade** - 54 comprehensive tests with 95%+ coverage
-- 🚀 **CI/CD Pipeline** - Automated testing, security scans, and deployment
 
 ---
 
-## 🌐 Live Demo
+## 🎯 Core Concepts
 
-**🎮 Try it now:** [https://your-demo-url.vercel.app](https://your-demo-url.vercel.app)
+### What is Fully Homomorphic Encryption (FHE)?
 
-**📋 Smart Contract:** `0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B`
-**🔗 Explorer:** [View on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B)
-**🌍 Network:** Sepolia Testnet (Chain ID: 11155111)
+FHE allows computations on encrypted data **without decrypting it first**. This enables:
 
----
+- **Privacy by Default** - Sensitive data never exposed on-chain
+- **Confidential Smart Contracts** - Process encrypted inputs and produce encrypted outputs
+- **Zero-Knowledge Computation** - Results verifiable without revealing inputs
 
-## 🏗️ Architecture
+### How This Project Uses FHE
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        USER LAYER                            │
-│  Wallet (MetaMask) → FHE Client-side Encryption             │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ Encrypted Carbon Data
-                       ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   SMART CONTRACT LAYER                       │
-│  PrivateGreenTravelRewards.sol                              │
-│  ├── Encrypted Storage (euint32)                            │
-│  ├── Homomorphic Operations (FHE.add, FHE.ge)               │
-│  ├── Period Management (7-day cycles)                       │
-│  └── Reward Distribution (Bronze/Silver/Gold)               │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ Decryption Request
-                       ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     ZAMA FHEVM LAYER                         │
-│  ├── Encrypted Computation (no plaintext exposure)          │
-│  ├── ACL-based Decryption (owner-only)                      │
-│  └── Oracle Callback (reward processing)                    │
-└─────────────────────────────────────────────────────────────┘
-```
+**Problem:** Traditional blockchain is transparent - all data is public. Users can't participate in incentive programs without revealing personal information (carbon savings, travel patterns).
 
-### Data Flow
+**Solution:** Using Zama FHEVM, users encrypt their carbon savings client-side before submission. The smart contract:
+1. Stores encrypted data on-chain
+2. Performs homomorphic operations (comparisons, additions) on encrypted values
+3. Calculates tier levels without ever seeing plaintext values
+4. Distributes rewards while maintaining complete privacy
 
-```
-1. Submit Travel Data
-   User → [Encrypt CO2 Savings] → Smart Contract
-
-2. Period Processing
-   Smart Contract → [FHE Computation] → Zama Network
-
-3. Reward Calculation
-   Zama Oracle → [Decrypt for Owner] → Callback → Distribute Rewards
-
-4. Claim Rewards
-   User → [Request Claim] → Smart Contract → [Transfer Tokens]
-```
+**Real-World Application:** Anonymous environmental incentives where users earn rewards for green behavior without exposing their actual carbon reduction amounts or travel patterns.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Live Deployment
+
+**🌐 Application:** [https://fhe-green-travel-rewards.vercel.app/](https://fhe-green-travel-rewards.vercel.app/)
+
+**📋 Smart Contract:** `0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B` (Sepolia Testnet)
+
+**🔗 Verified Contract:** [View on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B)
+
+**📦 SDK Repository:** [https://github.com/RileyLueilwitz/fhevm-react-template](https://github.com/RileyLueilwitz/fhevm-react-template)
+
+**🎮 Main Repository:** [https://github.com/RileyLueilwitz/FHEGreenTravelRewards](https://github.com/RileyLueilwitz/FHEGreenTravelRewards)
+
+---
+
+## 📦 Universal FHEVM SDK
+
+### Quick Start
+
+Install the SDK:
+
+```bash
+npm install @fhevm/sdk ethers
+```
+
+### Vanilla JavaScript Usage
+
+```javascript
+import { createFhevmInstance, encrypt } from '@fhevm/sdk'
+
+// 1. Initialize FHEVM
+const fhevm = await createFhevmInstance({ network: 'sepolia' })
+
+// 2. Encrypt data
+const encrypted = await encrypt(fhevm, 42, 'uint32')
+
+// 3. Submit to contract
+await contract.submitData(encrypted)
+```
+
+**That's it! FHE encryption in 3 lines.**
+
+### React Integration
+
+```jsx
+// Wrap your app
+import { FhevmProvider } from '@fhevm/sdk/react'
+
+<FhevmProvider config={{ network: 'sepolia' }}>
+  <App />
+</FhevmProvider>
+
+// Use in components
+import { useEncrypt } from '@fhevm/sdk/react'
+
+function MyComponent() {
+  const { encrypt } = useEncrypt()
+
+  const handleSubmit = async (value) => {
+    const encrypted = await encrypt(value, 'uint32')
+    await contract.submitData(encrypted)
+  }
+}
+```
+
+### Next.js Integration
+
+```jsx
+// pages/_app.jsx
+import { FhevmProvider } from '@fhevm/sdk/react'
+
+export default function App({ Component, pageProps }) {
+  return (
+    <FhevmProvider config={{ network: 'sepolia' }}>
+      <Component {...pageProps} />
+    </FhevmProvider>
+  )
+}
+```
+
+### SDK Features
+
+- **Core Functions:** `createFhevmInstance`, `encrypt`, `decrypt`, `encryptBatch`
+- **React Hooks:** `useFhevmInstance`, `useEncrypt`, `useDecrypt`
+- **Utilities:** EIP-712 signing, ACL management, validation
+- **Types:** Full TypeScript support with type definitions
+- **Documentation:** Complete API reference and integration guides
+
+---
+
+## 🏗️ Private Green Travel Rewards Architecture
+
+### Smart Contract Flow
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                      USER INTERFACE                           │
+│  MetaMask Wallet + FHEVM SDK → Client-side Encryption       │
+└────────────────────────┬─────────────────────────────────────┘
+                         │ Encrypted Carbon Data (euint32)
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│               SMART CONTRACT (Sepolia)                        │
+│  PrivateGreenTravelRewards.sol                               │
+│  ├── submitTravelData(bytes encryptedAmount)                │
+│  │   └── Store encrypted CO2 savings                        │
+│  ├── processPeriod() - FHE Operations                       │
+│  │   ├── FHE.add(encrypted values)                          │
+│  │   ├── FHE.ge(comparison for tiers)                       │
+│  │   └── Calculate rewards on encrypted data                │
+│  └── claimRewards() - Distribute tokens                     │
+└────────────────────────┬─────────────────────────────────────┘
+                         │ Decryption Request (ACL-protected)
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│                   ZAMA FHEVM NETWORK                          │
+│  ├── Homomorphic computation (no plaintext exposure)        │
+│  ├── Oracle-based decryption (owner authorization)          │
+│  └── Callback with results                                  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Reward Tiers
+
+Calculated entirely on encrypted data:
+
+- 🥉 **Bronze Tier** - Encrypted savings ≥ 1,000g CO2e → 10 tokens
+- 🥈 **Silver Tier** - Encrypted savings ≥ 5,000g CO2e → 25 tokens
+- 🥇 **Gold Tier** - Encrypted savings ≥ 10,000g CO2e → 50 tokens
+
+The smart contract performs tier comparisons using FHE operations without ever knowing the actual carbon values.
+
+---
+
+## 🛠️ Getting Started
 
 ### Prerequisites
 
 - Node.js v18.x or v20.x
-- npm or yarn
+- npm (v8.x or higher)
 - MetaMask wallet
 - Sepolia testnet ETH ([Get from faucet](https://sepoliafaucet.com/))
 
 ### Installation
 
 ```bash
-# Clone repository
-git clone https://github.com/your-username/private-green-travel-rewards.git
-cd private-green-travel-rewards
+# Clone the main repository
+git clone https://github.com/RileyLueilwitz/FHEGreenTravelRewards.git
+cd FHEGreenTravelRewards
 
 # Install dependencies
 npm install
 
-# Set up environment
+# Configure environment
 cp .env.example .env
-# Edit .env with your values
+# Edit .env with your keys:
+# - SEPOLIA_RPC_URL
+# - PRIVATE_KEY
+# - ETHERSCAN_API_KEY
 ```
 
-### Configuration
+### Running the SDK Examples
 
-Create `.env` file:
+```bash
+# Build the SDK package
+npm run build:sdk
 
-```env
-# Deployment
-PRIVATE_KEY=your_private_key_here
-SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY
-ETHERSCAN_API_KEY=your_etherscan_api_key_here
+# Run Next.js example
+npm run dev:nextjs
+# Opens on http://localhost:3000
 
-# Performance
-REPORT_GAS=false
-CONTRACT_SIZER=false
-OPTIMIZER_RUNS=200
-
-# Security
-PAUSER_ADDRESS=your_pauser_address_here
-EMERGENCY_STOP_ENABLED=true
+# Run React (Vite) example
+npm run dev:react
+# Opens on http://localhost:3001
 ```
 
-### Compile & Test
+### Smart Contract Development
 
 ```bash
 # Compile contracts
 npm run compile
 
-# Run all tests (54 tests)
+# Run tests
 npm test
 
-# Generate coverage report
+# Run tests with coverage
 npm run test:coverage
 
-# Run with gas reporting
-npm run test:gas
-```
-
-### Deploy
-
-```bash
-# Deploy to Sepolia testnet
+# Deploy to Sepolia
 npm run deploy
 
 # Verify on Etherscan
 npm run verify
-
-# Interactive CLI
-npm run interact
 ```
 
 ---
 
-## 📋 Usage Guide
+## 📁 Project Structure
 
-### For Users
-
-#### 1. Submit Travel Data
-
-```javascript
-// Connect wallet and submit carbon savings (encrypted)
-const carbonSaved = 5000; // grams CO2e
-await contract.submitTravelData(carbonSaved);
+```
+├── fhevm-react-template/          # SDK and examples monorepo
+│   ├── packages/
+│   │   └── fhevm-sdk/            # Universal FHEVM SDK
+│   │       ├── src/
+│   │       │   ├── core/         # Framework-agnostic functions
+│   │       │   ├── react/        # React hooks and provider
+│   │       │   └── utils/        # Utilities
+│   │       └── package.json
+│   │
+│   ├── examples/
+│   │   ├── nextjs/               # Next.js 14 example
+│   │   └── react/                # React + Vite example
+│   │
+│   ├── docs/                     # Comprehensive documentation
+│   │   ├── SDK_DOCUMENTATION.md
+│   │   ├── QUICK_START.md
+│   │   ├── ARCHITECTURE.md
+│   │   └── INTEGRATION.md
+│   │
+│   └── .github/workflows/        # CI/CD pipelines
+│
+├── contracts/                    # Smart contracts
+│   └── PrivateGreenTravelRewards.sol
+│
+├── scripts/                      # Deployment and interaction
+│   ├── deploy.js
+│   ├── verify.js
+│   ├── interact.js
+│   └── simulate.js
+│
+├── test/                         # Comprehensive test suite
+│   └── PrivateGreenTravelRewards.comprehensive.test.js
+│
+├── hardhat.config.js
+├── package.json
+└── demo.mp4                      # Demonstration video
 ```
 
-#### 2. Check Status
+---
 
-```javascript
-// View your submission status
-const status = await contract.getParticipantStatus(userAddress);
-console.log("Has submitted:", status.hasSubmitted);
-console.log("Reward tier:", status.reward);
-```
+## 🧪 Testing
 
-#### 3. Claim Rewards
-
-```javascript
-// Claim accumulated rewards
-await contract.claimRewards();
-```
-
-#### 4. View Statistics
-
-```javascript
-// Check lifetime stats
-const stats = await contract.getLifetimeStats(userAddress);
-console.log("Total rewards:", stats.totalRewards);
-console.log("Total carbon saved:", stats.totalCarbonSaved);
-```
-
-### For Contract Owner
-
-#### Start New Period
+### Test Coverage
 
 ```bash
-npm run interact
-# Select: "Start new period"
+npm run test:coverage
 ```
 
-Or programmatically:
+**Results:**
+- **54 comprehensive tests** - All passing
+- **95%+ code coverage** - Statements, branches, functions, lines
+- **Edge cases tested** - Boundary conditions, error handling, security
 
-```javascript
-await contract.startNewPeriod();
-```
+### Test Categories
 
-#### End Period & Process Rewards
-
-```javascript
-// After 7 days
-await contract.endPeriod();
-
-// Process each participant
-await contract.processNextParticipant();
-await contract.processNextParticipant();
-// ... repeat for all participants
-```
+1. **Deployment Tests** - Contract initialization, period setup
+2. **Encryption Tests** - Data submission, storage verification
+3. **Period Management** - Cycle progression, status tracking
+4. **Reward Calculation** - Tier assignment, homomorphic operations
+5. **Claim Tests** - Token distribution, balance updates
+6. **Access Control** - Owner functions, participant restrictions
+7. **Security Tests** - Reentrancy, overflow, unauthorized access
+8. **Gas Optimization** - Transaction costs, storage efficiency
 
 ---
 
-## 🔧 Technical Implementation
+## 🔒 Security
 
-### Smart Contract Architecture
+### Security Measures
 
-**File:** `contracts/PrivateGreenTravelRewards.sol`
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
-
-import "fhevm/lib/TFHE.sol";
-import "fhevm/access/ACL.sol";
-
-contract PrivateGreenTravelRewards {
-    // Encrypted carbon savings storage
-    mapping(address => euint32) private encryptedCarbonSavings;
-
-    // Homomorphic addition for privacy-preserving aggregation
-    function submitTravelData(bytes calldata encryptedAmount) external {
-        euint32 amount = TFHE.asEuint32(encryptedAmount);
-        encryptedCarbonSavings[msg.sender] = TFHE.add(
-            encryptedCarbonSavings[msg.sender],
-            amount
-        );
-    }
-
-    // Encrypted comparison for reward tiers
-    function calculateReward(euint32 carbonSaved) internal returns (uint256) {
-        euint32 goldThreshold = TFHE.asEuint32(10000);
-        euint32 silverThreshold = TFHE.asEuint32(5000);
-
-        ebool isGold = TFHE.ge(carbonSaved, goldThreshold);
-        ebool isSilver = TFHE.ge(carbonSaved, silverThreshold);
-
-        // FHE.select for conditional reward assignment
-        return TFHE.decrypt(
-            TFHE.select(isGold, TFHE.asEuint32(50),
-            TFHE.select(isSilver, TFHE.asEuint32(25), TFHE.asEuint32(10)))
-        );
-    }
-}
-```
-
-### FHE Encryption Types
-
-| Type | Description | Use Case |
-|------|-------------|----------|
-| `euint32` | 32-bit encrypted unsigned integer | Carbon savings (0-4.2B grams) |
-| `ebool` | Encrypted boolean | Tier comparisons (>= threshold) |
-| `euint64` | 64-bit encrypted unsigned integer | Large aggregations |
-
-### Homomorphic Operations
-
-```solidity
-// Addition (never reveals individual values)
-euint32 total = TFHE.add(contributionA, contributionB);
-
-// Comparison (encrypted result)
-ebool meetsGoal = TFHE.ge(total, targetAmount);
-
-// Selection (conditional without branching)
-euint32 reward = TFHE.select(meetsGoal, highReward, lowReward);
-```
-
----
-
-## 🔐 Security & Privacy
-
-### Privacy Model
-
-#### ✅ What's Private
-
-- 🔒 **Individual carbon savings** - Encrypted with FHEVM, only decryptable by owner
-- 🔒 **Submission amounts** - Stored as `euint32`, never exposed on-chain
-- 🔒 **Homomorphic totals** - Aggregated without revealing individual contributions
-- 🔒 **Tier calculations** - Encrypted comparisons using `TFHE.ge()`
-
-#### 🌍 What's Public
-
-- ✅ **Participation existence** - Transaction records on Sepolia
-- ✅ **Participant count** - Number of unique submissions per period
-- ✅ **Period metadata** - Start time, duration, status
-- ✅ **Reward claims** - Public token transfers (amounts visible)
-
-### Decryption Permissions
-
-```solidity
-// Only contract owner can request decryption
-function endPeriod() external onlyOwner {
-    TFHE.allowThis(encryptedTotal);
-    TFHE.allowThis(currentPeriod);
-
-    uint256[] memory cts = new uint256[](1);
-    cts[0] = Gateway.toUint256(encryptedTotal);
-    Gateway.requestDecryption(cts, this.processDecryption.selector);
-}
-```
-
-### Security Features
-
-- ✅ **Reentrancy Protection** - Using checks-effects-interactions pattern
 - ✅ **Access Control** - Owner-only administrative functions
-- ✅ **Input Validation** - Minimum carbon savings enforcement
-- ✅ **Period Constraints** - One submission per user per period
-- ✅ **Gas Optimization** - Storage packing, efficient loops
-- ✅ **DoS Prevention** - Pagination for batch processing
+- ✅ **Reentrancy Protection** - Guards on all external calls
+- ✅ **Input Validation** - Comprehensive parameter checking
+- ✅ **Overflow Protection** - Solidity 0.8.x built-in checks
+- ✅ **ACL-Based Decryption** - Zama's permission system
+- ✅ **Automated Audits** - Solhint, ESLint, npm audit
 
 ### Security Audits
 
@@ -335,785 +359,141 @@ function endPeriod() external onlyOwner {
 # Run security checks
 npm run security
 
-# NPM audit
+# Lint Solidity code
+npm run lint:sol
+
+# Check dependencies
 npm run security:audit
-
-# Slither static analysis
-npm run security:slither
-
-# Check for outdated dependencies
-npm run security:check-updates
 ```
-
----
-
-## 🧪 Testing
-
-### Test Coverage: 95%+ 🎯
-
-**Total Tests:** 54 passing
-**Categories:** 10 comprehensive test suites
-
-```bash
-# Run all tests
-npm test
-
-# With coverage report
-npm run test:coverage
-
-# With gas analysis
-npm run test:gas
-```
-
-### Test Categories
-
-1. **Deployment & Initialization** (5 tests)
-2. **Period Management** (8 tests)
-3. **Travel Data Submission** (10 tests)
-4. **Reward Processing** (6 tests)
-5. **Access Control** (6 tests)
-6. **View Functions** (4 tests)
-7. **Edge Cases** (8 tests)
-8. **Integration Tests** (4 tests)
-9. **Gas Optimization** (3 tests)
-10. **Event Emission** (3 tests)
-
-See [TESTING.md](./TESTING.md) for detailed test documentation.
-
-### Sample Test Output
-
-```bash
-  PrivateGreenTravelRewards - Comprehensive Test Suite
-    ✓ Should deploy with correct owner (245ms)
-    ✓ Should start with period 0 (89ms)
-    ✓ Should initialize with correct reward tiers (156ms)
-    ✓ Owner can start new period (312ms)
-    ✓ Non-owner cannot start period (67ms)
-    ✓ Cannot submit before period starts (98ms)
-    ✓ Can submit valid carbon savings (421ms)
-    ✓ Cannot submit twice in same period (203ms)
-    ...
-
-  54 passing (12.3s)
-```
-
----
-
-## 🎯 Reward Tiers
-
-| Tier | Carbon Reduction | Reward | Example |
-|------|------------------|--------|---------|
-| 🥉 **Bronze** | 1,000 - 4,999 g CO2e | 10 tokens | 2 days cycling (2,500g) |
-| 🥈 **Silver** | 5,000 - 9,999 g CO2e | 25 tokens | 5 days public transport (7,500g) |
-| 🥇 **Gold** | 10,000+ g CO2e | 50 tokens | 1 week car-free (15,000g) |
-
-### Carbon Savings Reference
-
-| Activity | CO2 Saved per km |
-|----------|------------------|
-| 🚗 → 🚲 Cycling | ~250g |
-| 🚗 → 🚶 Walking | ~250g |
-| 🚗 → 🚌 Bus | ~100g |
-| 🚗 → 🚇 Metro | ~150g |
-| 🚗 → 🚆 Train | ~150g |
-
----
-
-## ⚡ Performance & Gas Optimization
-
-### Compiler Settings
-
-```javascript
-// hardhat.config.js
-solidity: {
-  version: "0.8.24",
-  settings: {
-    optimizer: {
-      enabled: true,
-      runs: 200,  // Balanced deployment vs runtime costs
-      details: {
-        yul: true,
-        yulDetails: {
-          stackAllocation: true,
-          optimizerSteps: "dhfoDgvulfnTUtnIf"
-        }
-      }
-    }
-  }
-}
-```
-
-### Gas Report
-
-```bash
-npm run test:gas
-```
-
-| Method | Min | Max | Avg | Calls |
-|--------|-----|-----|-----|-------|
-| `startNewPeriod` | 95,123 | 98,456 | 96,789 | 15 |
-| `submitTravelData` | 145,234 | 152,345 | 148,789 | 45 |
-| `endPeriod` | 78,123 | 82,456 | 80,289 | 8 |
-| `processNextParticipant` | 65,432 | 68,123 | 66,777 | 120 |
-| `claimRewards` | 45,678 | 47,890 | 46,784 | 30 |
-
-### Contract Size
-
-```bash
-npm run size-check
-```
-
-**Size:** 18.5 KB / 24 KB limit ✅
-
----
-
-## 📦 Tech Stack
-
-### Smart Contract
-
-- **Solidity** `0.8.24` - Smart contract language with Cancun EVM
-- **Zama FHEVM** `0.5.0` - Fully Homomorphic Encryption library
-- **fhevmjs** `0.5.2` - Client-side FHE encryption
-- **Sepolia Testnet** - Ethereum testnet deployment
-
-### Development Tools
-
-- **Hardhat** `2.19.0` - Ethereum development environment
-- **Hardhat Toolbox** - Comprehensive plugin suite
-- **Ethers.js** `v6` - Blockchain interaction library
-- **Chai** `4.3.10` - Testing assertions
-
-### Security & Quality
-
-- **Solhint** - Solidity linting with security rules
-- **ESLint** `8.57.0` - JavaScript linting with security plugin
-- **Prettier** `3.1.0` - Code formatting
-- **Husky** `8.0.3` - Pre-commit hooks
-- **Slither** - Static analysis (via npm scripts)
-
-### Performance
-
-- **Hardhat Gas Reporter** - Gas usage tracking
-- **Contract Sizer** - Size monitoring (24KB limit)
-- **Solidity Optimizer** - Bytecode optimization
-- **Codecov** - Test coverage reporting
-
-### CI/CD
-
-- **GitHub Actions** - Automated testing & deployment
-- **Multi-version Testing** - Node.js 18.x, 20.x
-- **Security Scans** - Weekly automated audits
-- **Vercel** - Frontend deployment
-
----
-
-## 🛠️ Development
-
-### Project Structure
-
-```
-private-green-travel-rewards/
-├── contracts/
-│   └── PrivateGreenTravelRewards.sol    # Main contract
-├── scripts/
-│   ├── deploy.js                         # Deployment with artifacts
-│   ├── verify.js                         # Etherscan verification
-│   ├── interact.js                       # Interactive CLI (10 options)
-│   └── simulate.js                       # Full workflow demo
-├── tasks/
-│   ├── accounts.js                       # List accounts task
-│   ├── balance.js                        # Check balance task
-│   └── contract-info.js                  # Contract info task
-├── test/
-│   └── PrivateGreenTravelRewards.comprehensive.test.js  # 54 tests
-├── .github/
-│   ├── workflows/
-│   │   ├── test.yml                      # CI/CD testing
-│   │   ├── security.yml                  # Security scans
-│   │   └── deploy.yml                    # Deployment automation
-│   └── ISSUE_TEMPLATE/                   # Issue templates
-├── .husky/
-│   ├── pre-commit                        # Quality gates
-│   └── pre-push                          # Full validation
-├── deployments/                          # Deployment artifacts
-├── docs/
-│   ├── TESTING.md                        # Test documentation
-│   ├── DEPLOYMENT.md                     # Deployment guide
-│   ├── CI_CD.md                          # CI/CD documentation
-│   └── SECURITY_PERFORMANCE.md           # Security & performance guide
-├── hardhat.config.js                     # Hardhat configuration
-├── package.json                          # 35+ npm scripts
-├── .env.example                          # Environment template (200+ lines)
-├── .solhint.json                         # Solidity linting rules
-├── .eslintrc.json                        # JavaScript linting
-├── .prettierrc.json                      # Code formatting
-└── README.md                             # This file
-```
-
-### NPM Scripts Reference
-
-#### 🔨 Compilation
-
-```bash
-npm run compile        # Compile contracts
-npm run clean          # Clean artifacts
-npm run typechain      # Generate TypeScript types
-```
-
-#### 🧪 Testing
-
-```bash
-npm test               # Run all tests
-npm run test:coverage  # Coverage report
-npm run test:gas       # Gas analysis
-```
-
-#### 🚀 Deployment
-
-```bash
-npm run deploy         # Deploy to Sepolia
-npm run deploy:local   # Deploy locally
-npm run deploy:zama    # Deploy to Zama network
-npm run verify         # Verify on Etherscan
-```
-
-#### 🔍 Interaction
-
-```bash
-npm run interact       # Interactive CLI
-npm run simulate       # Full workflow demo
-npm run accounts       # List accounts
-npm run balance        # Check balance
-npm run contract-info  # Contract details
-```
-
-#### 🔐 Security
-
-```bash
-npm run security              # Full security audit
-npm run security:audit        # NPM audit
-npm run security:fix          # Auto-fix vulnerabilities
-npm run security:slither      # Slither analysis
-npm run security:check-updates # Check outdated packages
-```
-
-#### ⚡ Performance
-
-```bash
-npm run performance    # Performance analysis
-npm run size-check     # Contract size check
-npm run analyze        # Security + Performance
-```
-
-#### 📝 Code Quality
-
-```bash
-npm run lint           # All linting
-npm run lint:sol       # Solidity linting
-npm run lint:js        # JavaScript linting
-npm run lint:fix       # Auto-fix issues
-npm run format         # Format all files
-npm run format:check   # Check formatting
-```
-
-#### 🔄 Workflow
-
-```bash
-npm run prepare        # Install Husky hooks
-npm run pre-commit     # Manual pre-commit check
-npm run validate       # Full validation
-```
-
-### Custom Hardhat Tasks
-
-```bash
-# List all accounts with balances
-npx hardhat list-accounts
-
-# Check specific account balance
-npx hardhat balance --account 0x1234...
-
-# View deployed contract info
-npx hardhat contract-info --network sepolia
-npx hardhat contract-info --address 0x1234... --network sepolia
-```
-
----
-
-## 🌐 Deployment
-
-### Sepolia Testnet
-
-**Network Configuration:**
-
-```javascript
-// hardhat.config.js
-sepolia: {
-  url: process.env.SEPOLIA_RPC_URL,
-  chainId: 11155111,
-  accounts: [process.env.PRIVATE_KEY]
-}
-```
-
-**Deployed Contract:**
-
-- **Address:** `0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B`
-- **Network:** Sepolia (Chain ID: 11155111)
-- **Explorer:** [View on Etherscan](https://sepolia.etherscan.io/address/0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B)
-- **Verified:** ✅ Yes
-
-### Deployment Steps
-
-1. **Get Testnet ETH**
-
-```bash
-# Sepolia faucet
-https://sepoliafaucet.com/
-https://sepolia-faucet.pk910.de/
-```
-
-2. **Configure Environment**
-
-```bash
-cp .env.example .env
-# Edit .env with your keys
-```
-
-3. **Deploy Contract**
-
-```bash
-npm run compile
-npm run deploy
-```
-
-4. **Verify on Etherscan**
-
-```bash
-npm run verify
-```
-
-### Zama Network
-
-For full FHE functionality:
-
-```bash
-# Deploy to Zama testnet
-npm run deploy:zama
-```
-
-**Note:** Zama network required for encrypted computation callbacks.
 
 ---
 
 ## 📚 Documentation
 
-### Complete Guides
+### SDK Documentation
 
-- 📖 [Testing Guide](./TESTING.md) - 54 comprehensive tests
-- 🚀 [Deployment Guide](./DEPLOYMENT.md) - Step-by-step deployment
-- 🔄 [CI/CD Documentation](./CI_CD.md) - GitHub Actions workflows
-- 🔐 [Security & Performance](./SECURITY_PERFORMANCE.md) - Optimization guide
+Complete guides available in `/fhevm-react-template/docs/`:
 
-### External Resources
+- **[SDK_DOCUMENTATION.md](./fhevm-react-template/docs/SDK_DOCUMENTATION.md)** - Full API reference
+- **[QUICK_START.md](./fhevm-react-template/docs/QUICK_START.md)** - Get started in 5 minutes
+- **[ARCHITECTURE.md](./fhevm-react-template/docs/ARCHITECTURE.md)** - Design patterns and structure
+- **[INTEGRATION.md](./fhevm-react-template/docs/INTEGRATION.md)** - Framework-specific examples
 
-- 🌐 [Zama Documentation](https://docs.zama.ai) - FHEVM comprehensive docs
-- 📘 [Hardhat Documentation](https://hardhat.org/docs) - Development framework
-- 🔗 [fhEVM GitHub](https://github.com/zama-ai/fhevm) - FHEVM source code
-- 📊 [Sepolia Testnet](https://sepolia.etherscan.io/) - Block explorer
+### Project Documentation
+
+- **[PROJECT_OVERVIEW.md](./fhevm-react-template/PROJECT_OVERVIEW.md)** - Detailed project architecture
+- **[SETUP_GUIDE.md](./fhevm-react-template/SETUP_GUIDE.md)** - Installation and deployment
+- **[DEMO_SCRIPT.md](./fhevm-react-template/DEMO_SCRIPT.md)** - Video demonstration guide
 
 ---
 
-## 🐛 Troubleshooting
+## 🌐 Deployment
 
-### Common Issues
+### Live Application
 
-#### ❌ Compilation Fails
+**URL:** [https://fhe-green-travel-rewards.vercel.app/](https://fhe-green-travel-rewards.vercel.app/)
 
-```bash
-# Clean and recompile
-npm run clean
-rm -rf node_modules
-npm install
-npm run compile
-```
+**Features:**
+- Connect MetaMask wallet
+- Submit encrypted carbon savings
+- View SDK status and public key
+- Real-time transaction feedback
+- Responsive design
 
-#### ❌ Tests Failing
+### Smart Contract
 
-```bash
-# Check Node version (must be 18.x or 20.x)
-node --version
+**Network:** Sepolia Testnet
+**Contract Address:** `0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B`
+**Verification:** [Etherscan Link](https://sepolia.etherscan.io/address/0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B)
 
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-
-# Run tests with verbose output
-npm test -- --verbose
-```
-
-#### ❌ Deployment Fails
-
-```bash
-# Check balance
-npx hardhat balance --account YOUR_ADDRESS --network sepolia
-
-# Verify RPC endpoint
-curl -X POST $SEPOLIA_RPC_URL \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
-
-# Ensure contracts compiled
-npm run compile
-```
-
-#### ❌ Verification Fails
-
-```bash
-# Wait 2-3 minutes after deployment
-sleep 180
-
-# Check Etherscan API key
-echo $ETHERSCAN_API_KEY
-
-# Verify manually with constructor args
-npx hardhat verify --network sepolia CONTRACT_ADDRESS
-```
-
-#### ❌ Out of Gas
-
-```javascript
-// Increase gas limit in hardhat.config.js
-sepolia: {
-  gas: 5000000,
-  gasPrice: 50000000000 // 50 gwei
-}
-```
-
-### Error Messages
-
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `Period not active` | No period started | Call `startNewPeriod()` |
-| `Already submitted` | Duplicate submission | Wait for next period |
-| `Minimum not met` | CO2 < 1,000g | Submit higher amount |
-| `Period not ended` | Before 7 days | Wait until period ends |
-| `Not owner` | Access control | Use owner account |
+**Contract Features:**
+- FHE-based encryption storage
+- Homomorphic tier calculation
+- Weekly reward periods
+- Token distribution system
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these guidelines:
+We welcome contributions to both the SDK and the example application!
 
 ### Development Workflow
 
-1. **Fork & Clone**
-
 ```bash
-git clone https://github.com/your-username/private-green-travel-rewards.git
-cd private-green-travel-rewards
-```
+# Fork and clone
+git clone https://github.com/RileyLueilwitz/FHEGreenTravelRewards.git
+cd FHEGreenTravelRewards
 
-2. **Create Branch**
-
-```bash
-git checkout -b feature/your-feature-name
-```
-
-3. **Install & Test**
-
-```bash
+# Install dependencies
 npm install
+
+# Make changes to SDK
+cd fhevm-react-template/packages/fhevm-sdk
+# Edit src/ files
+
+# Test changes
 npm test
-npm run lint
+
+# Build SDK
+npm run build
+
+# Test in examples
+cd ../../examples/react
+npm install
+npm run dev
 ```
 
-4. **Make Changes**
+### Areas for Contribution
 
-- Follow existing code style
-- Add tests for new features
-- Update documentation
-
-5. **Pre-commit Checks**
-
-```bash
-npm run validate  # Runs compile + lint + test + security
-```
-
-6. **Submit PR**
-
-```bash
-git add .
-git commit -m "feat: add your feature"
-git push origin feature/your-feature-name
-```
-
-### Code Standards
-
-- ✅ **Solidity:** Follow [Solidity Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html)
-- ✅ **JavaScript:** ESLint + Prettier configured
-- ✅ **Tests:** Minimum 80% coverage for new code
-- ✅ **Documentation:** Update README for user-facing changes
-- ✅ **Security:** Run `npm run security` before submitting
-
-### Pre-commit Hooks
-
-Husky automatically runs:
-- Linting (Solhint + ESLint)
-- Formatting (Prettier)
-- Security audit (NPM Audit)
-- Tests (Mocha + Chai)
-
----
-
-## 🗺️ Roadmap
-
-### ✅ Phase 1: Core MVP (Completed)
-
-- [x] FHE-encrypted carbon savings submission
-- [x] Tiered reward calculation
-- [x] Weekly period management
-- [x] Sepolia testnet deployment
-- [x] Comprehensive test suite (54 tests)
-- [x] CI/CD pipeline with GitHub Actions
-
-### 🚧 Phase 2: Enhanced Features (In Progress)
-
-- [ ] Frontend dApp with React + Vite
-- [ ] MetaMask wallet integration
-- [ ] Real-time encrypted data display
-- [ ] User dashboard with statistics
-- [ ] Mobile-responsive design
-- [ ] Vercel production deployment
-
-### 🔮 Phase 3: Advanced Privacy (Planned)
-
-- [ ] Multi-tier access control
-- [ ] Verifiable computation proofs
-- [ ] Cross-chain reward distribution
-- [ ] Integration with carbon credit markets
-- [ ] Zero-knowledge identity verification
-- [ ] Decentralized oracle network
-
-### 🌟 Phase 4: Ecosystem Growth (Future)
-
-- [ ] Mobile app (iOS + Android)
-- [ ] Partnership with cities/municipalities
-- [ ] NFT achievements for milestones
-- [ ] Governance token for platform decisions
-- [ ] API for third-party integrations
-- [ ] Mainnet deployment
-
----
-
-## 🎬 Video Demo
-
-📹 **Watch the full demonstration:**
-[https://youtu.be/your-video-id](https://youtu.be/your-video-id)
-
-**Contents:**
-- System architecture walkthrough
-- Live contract interaction
-- Privacy demonstration
-- Reward claim process
-
----
-
-## 💰 Gas Costs
-
-### Estimated Costs (Sepolia)
-
-| Operation | Gas Used | Cost (50 gwei) | USD ($2000 ETH) |
-|-----------|----------|----------------|-----------------|
-| Deploy Contract | ~2,100,000 | 0.105 ETH | $210 |
-| Start Period | ~97,000 | 0.00485 ETH | $9.70 |
-| Submit Data | ~149,000 | 0.00745 ETH | $14.90 |
-| End Period | ~80,000 | 0.004 ETH | $8.00 |
-| Process Participant | ~67,000 | 0.00335 ETH | $6.70 |
-| Claim Rewards | ~47,000 | 0.00235 ETH | $4.70 |
-
-**Note:** Gas costs on mainnet may vary. FHE operations add ~30-50% overhead compared to standard contracts.
-
----
-
-## 🏆 Acknowledgments
-
-### Built With
-
-- **[Zama](https://www.zama.ai/)** - Fully Homomorphic Encryption technology
-- **[Hardhat](https://hardhat.org/)** - Professional Ethereum development environment
-- **[OpenZeppelin](https://www.openzeppelin.com/)** - Secure smart contract libraries
-- **[Ethers.js](https://docs.ethers.org/)** - Blockchain interaction library
-
-### Special Thanks
-
-- Zama team for the FHE Challenge and technical support
-- Hardhat community for excellent documentation
-- OpenZeppelin for security best practices
-- Sepolia testnet for free testing infrastructure
-
-### Competition
-
-🏅 **Built for the Zama FHE Challenge**
-Demonstrating real-world privacy-preserving applications with FHEVM
-
----
-
-## 📊 API Reference
-
-### Core Functions
-
-#### `startNewPeriod()`
-```solidity
-function startNewPeriod() external onlyOwner
-```
-- **Access:** Owner only
-- **Description:** Initializes new 7-day reward period
-- **Emits:** `PeriodStarted(periodNumber, startTime)`
-- **Reverts:** `Period is already active`
-
-#### `submitTravelData(uint32 carbonSaved)`
-```solidity
-function submitTravelData(uint32 carbonSaved) external
-```
-- **Access:** Public (period must be active)
-- **Parameters:** `carbonSaved` - Carbon savings in grams CO2e (min: 1,000)
-- **Emits:** `TravelDataSubmitted(participant, periodNumber, timestamp)`
-- **Reverts:** `Period not active`, `Already submitted`, `Minimum not met`
-
-#### `endPeriod()`
-```solidity
-function endPeriod() external onlyOwner
-```
-- **Access:** Owner only
-- **Description:** Ends current period after 7 days, triggers FHE decryption
-- **Emits:** `PeriodEnded(periodNumber, endTime, participants)`
-- **Reverts:** `Period not active`, `Period not elapsed`
-
-#### `processNextParticipant()`
-```solidity
-function processNextParticipant() external onlyOwner
-```
-- **Access:** Owner only
-- **Description:** Process next participant's reward after decryption
-- **Emits:** `RewardProcessed(participant, periodNumber, reward)`
-- **Reverts:** `Period not ended`, `No more participants`
-
-#### `claimRewards()`
-```solidity
-function claimRewards() external
-```
-- **Access:** Public (must have rewards)
-- **Description:** Withdraw accumulated rewards
-- **Emits:** `RewardsClaimed(participant, amount)`
-- **Reverts:** `No rewards available`
-
-### View Functions
-
-#### `getCurrentPeriodInfo()`
-```solidity
-function getCurrentPeriodInfo() external view returns (
-    uint256 periodNumber,
-    bool isActive,
-    bool hasEnded,
-    uint256 startTime,
-    uint256 endTime,
-    uint256 participantCount,
-    uint256 timeRemaining
-)
-```
-
-#### `getParticipantStatus(address participant)`
-```solidity
-function getParticipantStatus(address participant) external view returns (
-    bool hasSubmitted,
-    uint256 submissionTime,
-    bool processed,
-    uint256 reward
-)
-```
-
-#### `getLifetimeStats(address participant)`
-```solidity
-function getLifetimeStats(address participant) external view returns (
-    uint256 totalRewards,
-    uint256 totalCarbonSaved
-)
-```
-
-#### `getPeriodHistory(uint256 periodNumber)`
-```solidity
-function getPeriodHistory(uint256 periodNumber) external view returns (
-    bool wasActive,
-    bool hasEnded,
-    uint256 startTime,
-    uint256 endTime,
-    uint256 participantCount,
-    uint256 totalRewards
-)
-```
-
----
-
-## 🔗 Links
-
-- 🌐 **Live Demo:** [https://your-demo-url.vercel.app](https://your-demo-url.vercel.app)
-- 📦 **GitHub Repository:** [https://github.com/your-username/private-green-travel-rewards](https://github.com/your-username/private-green-travel-rewards)
-- 🔗 **Contract on Sepolia:** [0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B](https://sepolia.etherscan.io/address/0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B)
-- 📚 **Zama Documentation:** [https://docs.zama.ai](https://docs.zama.ai)
-- 🔧 **Hardhat Docs:** [https://hardhat.org/docs](https://hardhat.org/docs)
-- 🌍 **Sepolia Testnet:** [https://sepolia.etherscan.io](https://sepolia.etherscan.io)
-- 💧 **Sepolia Faucet:** [https://sepoliafaucet.com](https://sepoliafaucet.com)
+- 🔧 **SDK Core** - Improve encryption/decryption performance
+- ⚛️ **Framework Adapters** - Add Vue, Svelte, Angular support
+- 📚 **Documentation** - Expand guides and tutorials
+- 🧪 **Testing** - Add more test cases and scenarios
+- 🎨 **Examples** - Build additional demo applications
 
 ---
 
 ## 📄 License
 
-**MIT License** - see [LICENSE](./LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2024 Private Green Travel Rewards
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+MIT License - see [LICENSE](./LICENSE) file for details.
 
 ---
 
-## 📞 Contact & Support
+## 🙏 Acknowledgments
 
-- 📧 **Email:** support@your-project.com
-- 💬 **Discord:** [Join our community](https://discord.gg/your-invite)
-- 🐦 **Twitter:** [@YourProject](https://twitter.com/yourproject)
-- 💼 **LinkedIn:** [Company Page](https://linkedin.com/company/yourproject)
+**Special Thanks:**
+
+- **Zama Team** - For FHEVM technology and the Universal SDK bounty opportunity
+- **Ethereum Community** - For robust tooling and infrastructure
+- **Open Source Contributors** - For inspiration and support
 
 ---
 
-**⭐ Star us on GitHub if this project helped you!**
+## 🔗 Links & Resources
 
-**Built with ❤️ for the Zama FHE Challenge | Privacy-First • Eco-Friendly • Decentralized**
+### Project Links
+
+- **Live Demo:** [https://fhe-green-travel-rewards.vercel.app/](https://fhe-green-travel-rewards.vercel.app/)
+- **Main Repository:** [https://github.com/RileyLueilwitz/FHEGreenTravelRewards](https://github.com/RileyLueilwitz/FHEGreenTravelRewards)
+- **SDK Repository:** [https://github.com/RileyLueilwitz/fhevm-react-template](https://github.com/RileyLueilwitz/fhevm-react-template)
+- **Smart Contract:** [0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B](https://sepolia.etherscan.io/address/0x8Ac1d3E49A73F8328e43719dCF6fBfeF4405937B)
+
+### Zama Resources
+
+- **Zama Documentation:** [https://docs.zama.ai](https://docs.zama.ai)
+- **fhEVM GitHub:** [https://github.com/zama-ai/fhevm](https://github.com/zama-ai/fhevm)
+- **Discord Community:** [Join Zama Discord](https://discord.gg/zama)
+
+---
+
+**⭐ Star us on GitHub if this project helps your FHE development journey!**
+
+**Built with ❤️ for privacy-preserving web3 applications | Universal FHEVM SDK + Real-World Demo**
 
 ---
 
 **Version:** 1.0.0
-**Last Updated:** 2024-10-25
+**Last Updated:** October 26, 2025
 **Status:** Production Ready ✅
-**Framework:** Hardhat
-**Security Grade:** A+
+**Bounty:** Zama FHEVM Universal SDK Challenge
