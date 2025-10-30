@@ -1,0 +1,42 @@
+{
+  "name": "private-green-travel-rewards",
+  "version": "1.0.0",
+  "description": "Anonymous Eco-Friendly Transportation Incentives with FHE Privacy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js --network sepolia",
+    "deploy:zama": "hardhat run scripts/deploy.js --network zama",
+    "test": "hardhat test"
+  },
+  "keywords": [
+    "fhe",
+    "privacy",
+    "green-travel",
+    "blockchain",
+    "rewards"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@fhevm/sdk": "workspace:*",
+    "@fhevm/solidity": "^0.5.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "hardhat": "^2.19.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}

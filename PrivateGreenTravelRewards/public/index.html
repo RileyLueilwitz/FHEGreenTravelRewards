@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Green Travel Rewards - Anonymous Eco-Friendly Transportation Incentives</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🌱</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 Private Green Travel Rewards</h1>
+            <p class="subtitle">Anonymous Eco-Friendly Transportation Incentives with FHE Privacy</p>
+        </header>
+
+        <div class="wallet-section">
+            <button id="connectWallet" class="btn btn-primary">Connect Wallet</button>
+            <div id="walletInfo" class="wallet-info" style="display: none;">
+                <span id="walletAddress"></span>
+                <span id="networkName" class="network-badge"></span>
+            </div>
+        </div>
+
+        <div id="noPeriodWarning" class="warning-banner" style="display: none;">
+            ⚠️ <strong>No Active Period</strong> - The reward period has not been started yet.
+            <span id="adminHint">Please ask the contract owner to start a new period.</span>
+        </div>
+
+        <div class="status-section">
+            <h2>🔄 Current Period Status</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-label">Period Number</div>
+                    <div class="info-value" id="currentPeriod">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Status</div>
+                    <div class="info-value" id="periodStatus">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Participants</div>
+                    <div class="info-value" id="participantCount">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Time Remaining</div>
+                    <div class="info-value" id="timeRemaining">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>📊 Submit Carbon Savings</h2>
+            <p class="section-description">Submit your carbon reduction data privately using FHE encryption</p>
+
+            <div class="form-group">
+                <label for="carbonAmount">Carbon Saved (grams CO2e)</label>
+                <input
+                    type="number"
+                    id="carbonAmount"
+                    placeholder="Enter amount (e.g., 5000)"
+                    min="0"
+                    step="100"
+                >
+                <div class="help-text">
+                    💡 Reward Tiers:
+                    <ul>
+                        <li>🥉 Bronze (1,000-4,999g): 10 tokens</li>
+                        <li>🥈 Silver (5,000-9,999g): 25 tokens</li>
+                        <li>🥇 Gold (10,000g+): 50 tokens</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button id="submitTravel" class="btn btn-success" disabled>Submit Travel Data</button>
+
+            <div id="submissionStatus" class="status-message" style="display: none;"></div>
+        </div>
+
+        <div class="stats-section">
+            <h2>📈 Your Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-label">Total Rewards Earned</div>
+                    <div class="stat-value" id="totalRewards">0</div>
+                    <div class="stat-unit">tokens</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌍</div>
+                    <div class="stat-label">Lifetime Carbon Saved</div>
+                    <div class="stat-value" id="lifetimeCarbon">0</div>
+                    <div class="stat-unit">grams CO2e</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-label">Current Period Reward</div>
+                    <div class="stat-value" id="currentReward">0</div>
+                    <div class="stat-unit">tokens</div>
+                </div>
+            </div>
+
+            <button id="claimRewards" class="btn btn-claim" disabled>Claim Rewards</button>
+        </div>
+
+        <div class="admin-section" id="adminSection" style="display: none;">
+            <h2>⚙️ Admin Controls</h2>
+            <div class="admin-buttons">
+                <button id="startPeriod" class="btn btn-admin">Start New Period</button>
+                <button id="endPeriod" class="btn btn-admin">End Current Period</button>
+                <button id="processNext" class="btn btn-admin">Process Next Participant</button>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>ℹ️ About This System</h2>
+            <div class="about-content">
+                <p>
+                    <strong>Private Green Travel Rewards</strong> is a blockchain-based incentive system
+                    that rewards users for reducing their carbon footprint through eco-friendly transportation choices.
+                </p>
+                <h3>🔐 Privacy Features</h3>
+                <ul>
+                    <li>Your carbon savings data is encrypted using Fully Homomorphic Encryption (FHE)</li>
+                    <li>Rewards are calculated without revealing individual travel patterns</li>
+                    <li>Only you can view your personal statistics</li>
+                </ul>
+                <h3>🎯 How It Works</h3>
+                <ol>
+                    <li>Each reward period lasts 7 days</li>
+                    <li>Submit your carbon savings data during the active period</li>
+                    <li>Rewards are automatically calculated when the period ends</li>
+                    <li>Claim your earned tokens anytime</li>
+                </ol>
+                <h3>🌟 Reward Structure</h3>
+                <p>
+                    Rewards are tiered based on the amount of carbon dioxide equivalent (CO2e) you save:
+                </p>
+                <ul>
+                    <li><strong>Bronze Tier:</strong> 1,000-4,999 grams → 10 tokens</li>
+                    <li><strong>Silver Tier:</strong> 5,000-9,999 grams → 25 tokens</li>
+                    <li><strong>Gold Tier:</strong> 10,000+ grams → 50 tokens</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>Contract Address: <code id="contractAddress">0xA15ED92d12d602e0f2024C7AFe3692F17bCe6FA2</code></p>
+            <p>Powered by FHE Technology for Maximum Privacy</p>
+        </footer>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Processing transaction...</div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
