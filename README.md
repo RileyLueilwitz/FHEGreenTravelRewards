@@ -1,8 +1,59 @@
-# Privacy Gateway Contracts
+# 🌱 Private Green Travel Rewards
 
-A comprehensive smart contract system implementing privacy-preserving operations with Gateway callback pattern, refund mechanisms, and homomorphic encryption support.
+**Anonymous Eco-Friendly Transportation Incentives with FHE Privacy**
 
-Live Demo: https://fhe-green-travel-rewards.vercel.app/
+A blockchain-based reward system that incentivizes users to reduce their carbon footprint through eco-friendly transportation choices while maintaining complete privacy using Fully Homomorphic Encryption (FHE).
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success)](https://private-green-travel-rewards.vercel.app/)
+[![Contract](https://img.shields.io/badge/Contract-Verified-blue)](https://sepolia.etherscan.io/address/0xA15ED92d12d602e0f2024C7AFe3692F17bCe6FA2)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🎯 Core Concept
+
+Private Green Travel Rewards is a privacy-preserving incentive system that rewards users for reducing carbon emissions through sustainable transportation. The system leverages **Fully Homomorphic Encryption (FHE)** technology to ensure that:
+
+- 🔐 **Complete Privacy**: Your carbon savings data is encrypted and never revealed publicly
+- 🎁 **Fair Rewards**: Automated tier-based reward calculation without exposing individual contributions
+- 🌍 **Environmental Impact**: Encourages eco-friendly transportation choices (walking, cycling, public transit, carpooling)
+- ⛓️ **Blockchain Transparency**: Verifiable rewards distribution while maintaining user anonymity
+
+### How It Works
+
+1. **Weekly Reward Periods**: Each period lasts 7 days
+2. **Private Submission**: Users submit encrypted carbon savings data using FHE
+3. **Tiered Rewards**:
+   - 🥉 **Bronze** (1,000-4,999g CO2e): 10 tokens
+   - 🥈 **Silver** (5,000-9,999g CO2e): 25 tokens
+   - 🥇 **Gold** (10,000g+ CO2e): 50 tokens
+4. **Anonymous Processing**: Rewards are calculated on encrypted data without revealing individual amounts
+5. **Claim Anytime**: Users can claim their accumulated rewards whenever they want
+
+## 📋 Smart Contract
+
+**Contract Address**: `0xA15ED92d12d602e0f2024C7AFe3692F17bCe6FA2`
+
+**Network**: Sepolia Testnet
+
+**Verification**: [View on Etherscan](https://sepolia.etherscan.io/address/0xA15ED92d12d602e0f2024C7AFe3692F17bCe6FA2)
+
+### Key Features
+
+- ✅ FHE-encrypted carbon savings submissions
+- ✅ Automatic tier-based reward calculation
+- ✅ Weekly reward period management
+- ✅ Lifetime statistics tracking
+- ✅ Zero-knowledge privacy guarantees
+
+## 🚀 Live Application
+
+**Website**: [https://fhe-green-travel-rewards.vercel.app/](https://fhe-green-travel-rewards.vercel.app/)
+
+The application provides:
+- 🔗 MetaMask wallet integration
+- 📊 Real-time period status tracking
+- 📈 Personal statistics dashboard
+- 🎮 Admin controls for period management
+- 💎 Modern glassmorphism UI design
 
 
 ## Overview
