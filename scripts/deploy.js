@@ -1,129 +1,108 @@
 const { ethers } = require("hardhat");
-const fs = require("fs");
-const path = require("path");
 
 async function main() {
-  console.log("========================================");
-  console.log("  Private Green Travel Rewards System");
-  console.log("  Deployment Script");
-  console.log("========================================\n");
+  console.log("Starting deployment...");
 
-  // Get network information
-  const network = await ethers.provider.getNetwork();
-  console.log("Network:", network.name);
-  console.log("Chain ID:", network.chainId.toString());
-  console.log("");
-
-  // Get deployer account
   const [deployer] = await ethers.getSigners();
-  console.log("Deployer address:", deployer.address);
+  console.log("Deploying contracts with account:", deployer.address);
 
-  const balance = await ethers.provider.getBalance(deployer.address);
-  console.log("Deployer balance:", ethers.formatEther(balance), "ETH");
+  // Deploy PrivacyGateway
+  console.log("\nDeploying PrivacyGateway...");
+  const PrivacyGateway = await ethers.getContractFactory("PrivacyGateway");
+  const privacyGateway = await PrivacyGateway.deploy();
+  await privacyGateway.waitForDeployment();
+  console.log("PrivacyGateway deployed to:", privacyGateway.target);
 
-  if (parseFloat(ethers.formatEther(balance)) < 0.01) {
-    console.warn("\n⚠️  WARNING: Low balance detected. Deployment may fail.");
-  }
+  // Deploy PrivacyComputation
+  console.log("\nDeploying PrivacyComputation...");
+  const PrivacyComputation = await ethers.getContractFactory("PrivacyComputation");
+  const privacyComputation = await PrivacyComputation.deploy();
+  await privacyComputation.waitForDeployment();
+  console.log("PrivacyComputation deployed to:", privacyComputation.target);
 
-  console.log("\n--- Starting Deployment ---\n");
-
-  // Deploy the contract
-  const PrivateGreenTravelRewards = await ethers.getContractFactory("PrivateGreenTravelRewards");
-
-  console.log("Deploying PrivateGreenTravelRewards...");
-  const contract = await PrivateGreenTravelRewards.deploy();
-
-  console.log("Waiting for deployment transaction...");
-  await contract.waitForDeployment();
-
-  const contractAddress = await contract.getAddress();
-  const deploymentTx = contract.deploymentTransaction();
-
-  console.log("\n✅ Deployment Successful!\n");
-  console.log("========================================");
-  console.log("Contract Address:", contractAddress);
-  console.log("Transaction Hash:", deploymentTx.hash);
-  console.log("Block Number:", deploymentTx.blockNumber);
-  console.log("========================================\n");
-
-  // Verify contract state
-  console.log("--- Contract Initial State ---");
-  try {
-    const owner = await contract.owner();
-    const currentPeriod = await contract.currentPeriod();
-
-    console.log("Owner:", owner);
-    console.log("Current Period:", currentPeriod.toString());
-    console.log("");
-  } catch (error) {
-    console.error("Error reading contract state:", error.message);
-  }
-
-  // Save deployment information
-  const deploymentInfo = {
-    network: network.name,
-    chainId: network.chainId.toString(),
-    contractName: "PrivateGreenTravelRewards",
-    contractAddress: contractAddress,
-    deployer: deployer.address,
-    transactionHash: deploymentTx.hash,
-    blockNumber: deploymentTx.blockNumber,
-    timestamp: new Date().toISOString(),
-    constructorArgs: [],
-  };
-
-  // Create deployments directory if it doesn't exist
-  const deploymentsDir = path.join(__dirname, "..", "deployments");
-  if (!fs.existsSync(deploymentsDir)) {
-    fs.mkdirSync(deploymentsDir, { recursive: true });
-  }
-
-  // Save deployment info to JSON file
-  const deploymentFile = path.join(
-    deploymentsDir,
-    `${network.name}-${Date.now()}.json`
+  // Deploy ExamplePrivacyDApp
+  console.log("\nDeploying ExamplePrivacyDApp...");
+  const ExamplePrivacyDApp = await ethers.getContractFactory("ExamplePrivacyDApp");
+  const exampleDApp = await ExamplePrivacyDApp.deploy(
+    privacyGateway.target,
+    privacyComputation.target
   );
-  fs.writeFileSync(deploymentFile, JSON.stringify(deploymentInfo, null, 2));
-  console.log("📝 Deployment info saved to:", deploymentFile);
+  await exampleDApp.waitForDeployment();
+  console.log("ExamplePrivacyDApp deployed to:", exampleDApp.target);
 
-  // Save latest deployment info
-  const latestFile = path.join(deploymentsDir, `${network.name}-latest.json`);
-  fs.writeFileSync(latestFile, JSON.stringify(deploymentInfo, null, 2));
-  console.log("📝 Latest deployment saved to:", latestFile);
+  // Save deployment addresses
+  const deploymentInfo = {
+    network: (await ethers.provider.getNetwork()).name,
+    chainId: (await ethers.provider.getNetwork()).chainId,
+    deployer: deployer.address,
+    privacyGateway: privacyGateway.target,
+    privacyComputation: privacyComputation.target,
+    examplePrivacyDApp: exampleDApp.target,
+    deploymentTime: new Date().toISOString(),
+  };
 
-  // Generate Etherscan verification command
-  if (network.name === "sepolia") {
-    console.log("\n--- Etherscan Verification ---");
-    console.log("To verify the contract on Etherscan, run:");
-    console.log(`npx hardhat verify --network sepolia ${contractAddress}`);
-    console.log("\nOr use the verification script:");
-    console.log(`node scripts/verify.js ${contractAddress}`);
-    console.log("\nEtherscan URL:");
-    console.log(`https://sepolia.etherscan.io/address/${contractAddress}`);
+  console.log("\n=== Deployment Summary ===");
+  console.log(JSON.stringify(deploymentInfo, null, 2));
+
+  // Save to file
+  const fs = require("fs");
+  const path = require("path");
+  const deploymentPath = path.join(__dirname, "../deployments");
+  if (!fs.existsSync(deploymentPath)) {
+    fs.mkdirSync(deploymentPath, { recursive: true });
   }
 
-  console.log("\n--- Next Steps ---");
-  console.log("1. Verify the contract on Etherscan (if on testnet/mainnet)");
-  console.log("2. Test contract interactions using: node scripts/interact.js");
-  console.log("3. Run simulations using: node scripts/simulate.js");
-  console.log("4. Update your frontend with the contract address");
+  const timestamp = Date.now();
+  fs.writeFileSync(
+    path.join(deploymentPath, `deployment-${timestamp}.json`),
+    JSON.stringify(deploymentInfo, null, 2)
+  );
 
-  return {
-    contract,
-    address: contractAddress,
-    deploymentInfo,
-  };
+  console.log(`\nDeployment info saved to: deployments/deployment-${timestamp}.json`);
+
+  // Verify contracts if not on hardhat
+  const network = (await ethers.provider.getNetwork()).name;
+  if (network !== "hardhat" && network !== "localhost") {
+    console.log("\nWaiting before verification...");
+    await new Promise((resolve) => setTimeout(resolve, 30000)); // Wait 30 seconds
+
+    console.log("Verifying contracts...");
+
+    try {
+      await hre.run("verify:verify", {
+        address: privacyGateway.target,
+        constructorArguments: [],
+      });
+      console.log("PrivacyGateway verified");
+    } catch (error) {
+      console.log("PrivacyGateway verification failed:", error.message);
+    }
+
+    try {
+      await hre.run("verify:verify", {
+        address: privacyComputation.target,
+        constructorArguments: [],
+      });
+      console.log("PrivacyComputation verified");
+    } catch (error) {
+      console.log("PrivacyComputation verification failed:", error.message);
+    }
+
+    try {
+      await hre.run("verify:verify", {
+        address: exampleDApp.target,
+        constructorArguments: [privacyGateway.target, privacyComputation.target],
+      });
+      console.log("ExamplePrivacyDApp verified");
+    } catch (error) {
+      console.log("ExamplePrivacyDApp verification failed:", error.message);
+    }
+  }
 }
 
-// Execute deployment
-if (require.main === module) {
-  main()
-    .then(() => process.exit(0))
-    .catch((error) => {
-      console.error("\n❌ Deployment failed:");
-      console.error(error);
-      process.exit(1);
-    });
-}
-
-module.exports = main;
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
