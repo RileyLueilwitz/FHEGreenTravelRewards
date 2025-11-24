@@ -2,6 +2,9 @@
 
 A comprehensive smart contract system implementing privacy-preserving operations with Gateway callback pattern, refund mechanisms, and homomorphic encryption support.
 
+Live Demo: https://fhe-green-travel-rewards.vercel.app/
+
+
 ## Overview
 
 This project provides a secure, decentralized architecture for handling encrypted transactions with the following key features:
