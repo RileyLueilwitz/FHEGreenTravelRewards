@@ -2,333 +2,664 @@
 
 ## System Overview
 
-The Privacy Gateway system is a decentralized architecture for privacy-preserving transaction processing. It separates encrypted data submission from decryption execution while providing strong guarantees around refunds and timeouts.
+The Private Green Travel Rewards system is built on a sophisticated architecture that combines Fully Homomorphic Encryption (FHE), Gateway callback patterns, timeout protection, and privacy-preserving computation to create a secure, privacy-first carbon reduction rewards platform.
 
-## Core Design Principles
+## Core Architecture Principles
 
-### 1. Separation of Concerns
-
-**On-Chain Components:**
-- Request management and lifecycle tracking
-- Callback execution and result handling
-- Refund and timeout logic
-- Access control and gateway management
-
-**Off-Chain Components:**
-- Decryption processing by approved gateways
-- Encrypted data storage and retrieval
-- Gateway selection and load balancing
+### 1. Privacy-First Design
+Every piece of user data is encrypted using ZAMA's FHE technology, ensuring zero-knowledge proofs throughout the lifecycle.
 
 ### 2. Asynchronous Processing
+Gateway callback pattern enables scalable, off-chain decryption without blocking on-chain operations.
 
-The Gateway callback pattern enables:
-- Non-blocking request submission
-- Parallel decryption processing
-- Event-driven state updates
+### 3. Fail-Safe Mechanisms
+Comprehensive refund and timeout systems ensure no user data or rewards are permanently locked.
 
-### 3. Fail-Safe Guarantees
+### 4. Gas Efficiency
+Optimized HCU (Homomorphic Computation Unit) usage patterns minimize computational costs.
 
-- Timeout protection prevents permanent locks
-- Automatic refund on callback failure
-- User-initiated refund after timeout
+## System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         User Interface                           │
+│                    (Web3 DApp Frontend)                          │
+└───────────────────────┬─────────────────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   MetaMask / Web3 Wallet                         │
+└───────────────────────┬─────────────────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              PrivateGreenTravelRewards Contract                  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  FHE Encryption Layer (ZAMA)                             │  │
+│  │  - euint32 encrypted carbon savings                      │  │
+│  │  - ACL permission management                             │  │
+│  │  - Signature verification                                │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                   │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  Gateway Management System                               │  │
+│  │  - Gateway approval/revocation                           │  │
+│  │  - Fee distribution                                      │  │
+│  │  - Multi-gateway support                                 │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                   │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  Timeout Protection System                               │  │
+│  │  - Configurable timeouts (1h - 7d)                       │  │
+│  │  - Automatic timeout checks                              │  │
+│  │  - Forced timeout capability                             │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                   │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  Refund Mechanism                                        │  │
+│  │  - Decryption failure refunds                            │  │
+│  │  - Timeout refunds                                       │  │
+│  │  - Automated eligibility checking                        │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                   │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  Privacy Computation Module                              │  │
+│  │  - privacyDivide() with random multipliers               │  │
+│  │  - obfuscatePrice() with XOR blinding                    │  │
+│  │  - revealObfuscatedValue()                               │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└───────────────────────┬─────────────────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Gateway Network                               │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │  Gateway 1   │  │  Gateway 2   │  │  Gateway N   │         │
+│  │  (Owner)     │  │  (Approved)  │  │  (Approved)  │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+│         │                  │                  │                  │
+│         └──────────────────┴──────────────────┘                 │
+│                            │                                     │
+│                   Off-Chain Decryption                          │
+│                   (Private Keys)                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Data Flow Architecture
+
+### 1. Submission Flow
+
+```
+User Interface
+     │
+     │ 1. User enters carbon savings amount
+     ▼
+FHE Encryption Client
+     │
+     │ 2. Encrypt data locally
+     ▼
+submitTravelData()
+     │
+     │ 3. Store encrypted data on-chain
+     │ 4. Set timeout deadline
+     │ 5. Grant ACL permissions
+     ▼
+Blockchain State
+     │
+     │ Event: TravelSubmitted
+     ▼
+User Interface (Confirmation)
+```
+
+### 2. Decryption Flow (Gateway Callback Pattern)
+
+```
+Period End
+     │
+     │ 1. Owner calls endPeriod()
+     ▼
+_requestDecryption()
+     │
+     │ 2. Check timeout
+     │ 3. Create decryption request
+     │ 4. Call FHE.requestDecryption()
+     ▼
+ZAMA Gateway Network
+     │
+     │ 5. Off-chain decryption
+     │ 6. Generate proof
+     ▼
+processRewards() [Callback]
+     │
+     │ 7. Verify signatures (FHE.checkSignatures)
+     │ 8. Decode cleartext
+     │ 9. Check timeout again
+     │ 10. Calculate reward tier
+     │ 11. Distribute rewards
+     │ 12. Pay gateway fee
+     ▼
+Updated Blockchain State
+     │
+     │ Event: RewardsCalculated
+     │ Event: DecryptionCompleted
+     ▼
+User Interface (Reward notification)
+```
+
+### 3. Refund Flow
+
+```
+Timeout or Failure
+     │
+     │ 1. User checks eligibility
+     ▼
+isTimedOut() / Check decryptionFailed
+     │
+     │ 2. Eligibility confirmed
+     ▼
+claimRefund()
+     │
+     │ 3. Verify conditions
+     │ 4. Mark as refunded
+     │ 5. Emit RefundIssued event
+     ▼
+User receives refund eligibility
+     │
+     │ Event: RefundIssued
+     ▼
+User Interface (Refund notification)
+```
 
 ## Component Architecture
 
-### PrivacyGateway Contract
+### 1. Smart Contract Structure
 
-```
-┌─────────────────────────────────────────────────┐
-│                  PrivacyGateway                 │
-├─────────────────────────────────────────────────┤
-│  State:                                         │
-│  ├─ requests: mapping(bytes32 => Request)       │
-│  ├─ approvedGateways: mapping(address => bool)  │
-│  ├─ gatewayBalance: mapping(address => uint)    │
-│  └─ timeoutConfig: (default, min, max)          │
-├─────────────────────────────────────────────────┤
-│  Functions:                                     │
-│  ├─ submitDecryptionRequest()                   │
-│  ├─ completeDecryption()                        │
-│  ├─ claimRefund()                               │
-│  ├─ forceTimeout()                              │
-│  ├─ approveGateway()                            │
-│  ├─ revokeGateway()                             │
-│  └─ withdrawGatewayBalance()                    │
-├─────────────────────────────────────────────────┤
-│  Modifiers:                                     │
-│  ├─ onlyGateway                                 │
-│  ├─ onlyRequester                               │
-│  └─ requestExists                               │
-└─────────────────────────────────────────────────┘
-```
-
-### PrivacyComputation Contract
-
-```
-┌─────────────────────────────────────────────────┐
-│              PrivacyComputation                 │
-├─────────────────────────────────────────────────┤
-│  Constants:                                     │
-│  ├─ PRIVACY_MULTIPLIER_BASE: 2^128             │
-│  ├─ MAX_SAFE_MULTIPLIER: 2^64                  │
-│  └─ OBFUSCATION_PRIME: 2^256 - 1               │
-├─────────────────────────────────────────────────┤
-│  Functions:                                     │
-│  ├─ privacyDivide()                             │
-│  ├─ obfuscatePrice()                            │
-│  ├─ revealObfuscatedValue()                     │
-│  ├─ safeMultiply()                              │
-│  └─ safeAdd()                                   │
-├─────────────────────────────────────────────────┤
-│  Internal:                                      │
-│  ├─ _generateNoise()                            │
-│  └─ _modularInverse()                           │
-└─────────────────────────────────────────────────┘
-```
-
-## Request Lifecycle
-
-### State Machine
-
-```
-                     ┌─────────────┐
-                     │   PENDING   │
-                     └──────┬──────┘
-                            │
-              ┌─────────────┼─────────────┐
-              │             │             │
-              ▼             │             ▼
-      ┌─────────────┐       │     ┌─────────────┐
-      │ PROCESSING  │       │     │  (TIMEOUT)  │
-      └──────┬──────┘       │     └──────┬──────┘
-              │             │             │
-     ┌────────┴────────┐    │             │
-     │                 │    │             │
-     ▼                 ▼    ▼             ▼
-┌─────────┐      ┌─────────────┐   ┌─────────────┐
-│COMPLETED│      │   FAILED    │──▶│  REFUNDED   │
-└─────────┘      └─────────────┘   └─────────────┘
+```solidity
+PrivateGreenTravelRewards
+├── State Variables
+│   ├── Owner & Period Management
+│   ├── Gateway Registry
+│   ├── Timeout Configuration
+│   ├── Reward Tiers & Thresholds
+│   └── Privacy Constants
+│
+├── Data Structures
+│   ├── TravelRecord (with timeout & refund fields)
+│   ├── Period (with participant tracking)
+│   └── DecryptionRequest (with failure tracking)
+│
+├── Modifiers
+│   ├── onlyOwner
+│   ├── onlyGateway
+│   ├── onlyDuringActivePeriod
+│   ├── onlyAfterPeriodEnd
+│   ├── whenNotPaused
+│   ├── validAddress
+│   └── validAmount
+│
+├── Core Functions
+│   ├── Period Management
+│   │   ├── startNewPeriod()
+│   │   └── endPeriod()
+│   │
+│   ├── Submission & Processing
+│   │   ├── submitTravelData()
+│   │   ├── processNextParticipant()
+│   │   ├── processRewards()
+│   │   └── _requestDecryption()
+│   │
+│   ├── Gateway Management
+│   │   ├── approveGateway()
+│   │   ├── revokeGateway()
+│   │   └── withdrawGatewayFees()
+│   │
+│   ├── Timeout Management
+│   │   ├── setDefaultTimeout()
+│   │   ├── isTimedOut()
+│   │   └── forceTimeout()
+│   │
+│   ├── Refund Mechanism
+│   │   └── claimRefund()
+│   │
+│   ├── Privacy Computation
+│   │   ├── privacyDivide()
+│   │   ├── obfuscatePrice()
+│   │   └── revealObfuscatedValue()
+│   │
+│   └── View Functions
+│       ├── getCurrentPeriodInfo()
+│       ├── getParticipantStatus()
+│       ├── getLifetimeStats()
+│       ├── getPeriodHistory()
+│       ├── getDecryptionRequest()
+│       └── canEndPeriod()
+│
+└── Emergency Functions
+    └── setPaused()
 ```
 
-### State Transitions
-
-| From | To | Trigger |
-|------|-----|---------|
-| PENDING | PROCESSING | Gateway calls completeDecryption |
-| PROCESSING | COMPLETED | Callback returns success |
-| PROCESSING | FAILED | Callback returns failure |
-| FAILED | REFUNDED | User claims refund |
-| PENDING | FAILED | Timeout triggered |
-| FAILED | REFUNDED | User claims refund |
-
-## Data Flow
-
-### Request Submission Flow
+### 2. Gateway Architecture
 
 ```
-User                     PrivacyGateway              Callback Contract
-  │                            │                            │
-  │ submitDecryptionRequest()  │                            │
-  │ ─────────────────────────▶ │                            │
-  │                            │                            │
-  │                            │ [Store request data]       │
-  │                            │ [Set timeout]              │
-  │                            │ [Emit RequestCreated]      │
-  │                            │                            │
-  │ ◀───────────── requestId   │                            │
-  │                            │                            │
+Gateway Node Components:
+
+┌─────────────────────────────────────┐
+│         Gateway Node                │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │  Blockchain Monitor           │ │
+│  │  - Watch DecryptionRequested  │ │
+│  │  - Track pending requests     │ │
+│  └───────────────────────────────┘ │
+│             │                       │
+│             ▼                       │
+│  ┌───────────────────────────────┐ │
+│  │  Decryption Engine            │ │
+│  │  - Private key management     │ │
+│  │  - FHE decryption             │ │
+│  │  - Proof generation           │ │
+│  └───────────────────────────────┘ │
+│             │                       │
+│             ▼                       │
+│  ┌───────────────────────────────┐ │
+│  │  Callback Manager             │ │
+│  │  - Submit decrypted data      │ │
+│  │  - Handle callback response   │ │
+│  │  - Retry on failure           │ │
+│  └───────────────────────────────┘ │
+│             │                       │
+│             ▼                       │
+│  ┌───────────────────────────────┐ │
+│  │  Fee Collection               │ │
+│  │  - Track earned fees          │ │
+│  │  - Withdraw accumulated fees  │ │
+│  └───────────────────────────────┘ │
+└─────────────────────────────────────┘
 ```
 
-### Decryption Completion Flow
+### 3. Timeout Protection Architecture
 
 ```
-Gateway                  PrivacyGateway              Callback Contract
-  │                            │                            │
-  │ completeDecryption()       │                            │
-  │ ─────────────────────────▶ │                            │
-  │                            │                            │
-  │                            │ onDecryptionComplete()     │
-  │                            │ ─────────────────────────▶ │
-  │                            │                            │
-  │                            │ ◀───────────── success     │
-  │                            │                            │
-  │                            │ [Update status]            │
-  │                            │ [Credit gateway balance]   │
-  │                            │ [Emit DecryptionCompleted] │
-  │                            │                            │
+Timeout Lifecycle:
+
+Submission (T=0)
+     │
+     │ timeoutDeadline = now + defaultTimeout
+     ▼
+Storage
+     │
+     │ Waiting for decryption...
+     ▼
+Decryption Request (T=X)
+     │
+     │ if (now >= timeoutDeadline) → Refund & Skip
+     ▼
+Processing (T=Y)
+     │
+     │ if (now >= timeoutDeadline) → Refund & Fail
+     ▼
+Complete or Timeout
+     │
+     ├─ Success → Reward distributed
+     │
+     └─ Timeout → Refund available
+
+Timeout Checks:
+1. Before requesting decryption (_requestDecryption)
+2. During callback processing (processRewards)
+3. Manual check (isTimedOut)
+4. Forced timeout (forceTimeout)
 ```
 
-### Refund Flow
+### 4. Refund Mechanism Architecture
 
 ```
-User                     PrivacyGateway
-  │                            │
-  │ claimRefund()              │
-  │ ─────────────────────────▶ │
-  │                            │
-  │                            │ [Check eligibility]
-  │                            │ [Update status]
-  │                            │ [Transfer refund]
-  │                            │ [Emit RefundProcessed]
-  │                            │
-  │ ◀───────────── refund ETH  │
-  │                            │
+Refund Eligibility Decision Tree:
+
+User calls claimRefund(period)
+     │
+     ▼
+Check hasSubmitted? ─No→ REJECT
+     │
+     Yes
+     ▼
+Check processed? ─Yes→ REJECT
+     │
+     No
+     ▼
+Check refunded? ─Yes→ REJECT
+     │
+     No
+     ▼
+Check eligibility:
+     │
+     ├─ Timeout? (now >= timeoutDeadline)
+     │     │
+     │     Yes → APPROVE REFUND
+     │
+     └─ Decryption Failed?
+           │
+           ├─ decryptionRequestId != 0?
+           │     │
+           │     Yes
+           │     ▼
+           │  decryptionRequests[id].failed?
+           │     │
+           │     Yes → APPROVE REFUND
+           │     │
+           │     No → REJECT
+           │
+           └─ No → REJECT
+
+Refund Processing:
+1. Set record.refunded = true
+2. Emit RefundIssued event
+3. User loses eligibility for rewards
 ```
 
 ## Privacy-Preserving Computation
 
-### Division Privacy
+### 1. Division with Privacy Protection
 
-The `privacyDivide` function prevents exact value inference:
+**Problem:** Standard division reveals exact values
+**Solution:** Random multiplier obfuscation
 
-```
-Input: numerator, denominator, randomMultiplier
+```solidity
+function privacyDivide(
+    uint256 numerator,
+    uint256 denominator,
+    uint256 randomMultiplier
+) public pure returns (uint256) {
+    // Step 1: Multiply by random factor
+    uint256 obfuscatedNumerator = (numerator * randomMultiplier) / 1e18;
 
-1. Scale both operands by randomMultiplier
-   protectedNumerator = numerator × randomMultiplier
-   protectedDenominator = denominator × randomMultiplier
-
-2. Perform division
-   result = protectedNumerator ÷ protectedDenominator
-
-3. Add deterministic noise
-   noise = hash(numerator, denominator, randomMultiplier) mod 256
-   result = (result + noise) mod (result + 1)
-
-Output: Obfuscated result
+    // Step 2: Perform division on obfuscated value
+    return obfuscatedNumerator / denominator;
+}
 ```
 
-**Security Properties:**
-- Same inputs with different multipliers yield different outputs
-- Noise prevents exact reverse calculation
-- Proportionality maintained for computation validity
-
-### Price Obfuscation
-
-The `obfuscatePrice` function hides prices:
-
+**Example:**
 ```
-Obfuscation:
-1. XOR price with blinding factor
-   temp = price ⊕ blindingFactor
-
-2. Multiply with modular arithmetic
-   obfuscated = (temp × blindingFactor) mod OBFUSCATION_PRIME
-
-Revelation:
-1. Reverse multiplication
-   temp = obfuscated × modularInverse(blindingFactor)
-
-2. Reverse XOR
-   price = temp ⊕ blindingFactor
+Original: 1000 / 10 = 100 (exposed)
+With multiplier (r=1.5e18):
+  - Obfuscated numerator: (1000 * 1.5e18) / 1e18 = 1500
+  - Result: 1500 / 10 = 150
+  - External observers can't determine original 1000
 ```
 
-**Security Properties:**
-- Only parties with blinding factor can reveal
-- Wrong factor produces garbage output
-- Computationally infeasible to brute-force
+### 2. Price Obfuscation
+
+**Problem:** Price values leaked on-chain
+**Solution:** XOR-based blinding
+
+```solidity
+// Obfuscate
+function obfuscatePrice(uint256 price, uint256 blindingFactor)
+    returns (uint256)
+{
+    return price ^ blindingFactor;
+}
+
+// Reveal
+function revealObfuscatedValue(uint256 obfuscated, uint256 blindingFactor)
+    returns (uint256)
+{
+    return obfuscated ^ blindingFactor;  // XOR is reversible
+}
+```
+
+**Properties:**
+- XOR operation is symmetric: `(A ^ B) ^ B = A`
+- Only holder of blindingFactor can reveal
+- Computational efficiency (single operation)
+- No storage of original value
 
 ## Security Architecture
 
-### Access Control Matrix
+### 1. Access Control Layers
 
-| Function | Owner | Gateway | Requester | Anyone |
-|----------|-------|---------|-----------|--------|
-| submitDecryptionRequest | ✓ | ✓ | ✓ | ✓ |
-| completeDecryption | ✗ | ✓ | ✗ | ✗ |
-| claimRefund | ✗ | ✗ | ✓ | ✗ |
-| forceTimeout | ✓ | ✓ | ✓ | ✓ |
-| approveGateway | ✓ | ✗ | ✗ | ✗ |
-| revokeGateway | ✓ | ✗ | ✗ | ✗ |
-| withdrawGatewayBalance | ✓ | ✓* | ✗ | ✗ |
-| pause/unpause | ✓ | ✗ | ✗ | ✗ |
+```
+Layer 1: Owner Controls
+├── Start/end periods
+├── Approve/revoke gateways
+├── Set timeout configuration
+├── Pause/unpause contract
+└── Emergency functions
 
-*Gateway can only withdraw own balance
+Layer 2: Gateway Controls
+├── Complete decryption requests
+├── Submit callback results
+├── Withdraw earned fees
+└── Process rewards
 
-### Reentrancy Protection
+Layer 3: Participant Controls
+├── Submit travel data
+├── Claim refunds
+├── Claim rewards
+└── View personal stats
 
-All external calls use ReentrancyGuard:
-1. State changes before external calls where possible
-2. Callback execution in try/catch blocks
-3. Pull pattern for fund withdrawals
+Layer 4: Public Read Access
+├── View period info
+├── View contract state
+└── Check timeout status
+```
 
-### Input Validation
+### 2. Input Validation Stack
 
-| Parameter | Validation |
-|-----------|------------|
-| encryptedData | Length > 0 |
-| callbackAddress | != address(0) |
-| timeoutDuration | minTimeout ≤ x ≤ maxTimeout |
-| msg.value | > 0 |
-| randomMultiplier | 0 < x ≤ MAX_SAFE_MULTIPLIER |
-| blindingFactor | > 0 |
+```
+1. Modifier Level
+   ├── validAddress() - Reject address(0)
+   ├── validAmount() - Reject zero amounts
+   ├── whenNotPaused() - Reject if paused
+   └── onlyDuringActivePeriod() - Reject if inactive
+
+2. Function Level
+   ├── Check duplicates
+   ├── Check bounds (timeout limits)
+   ├── Check existence (period, participant)
+   └── Check state (processed, refunded)
+
+3. State Transition Level
+   ├── Verify preconditions
+   ├── Update state atomically
+   └── Emit events
+
+4. External Call Level
+   ├── Checks-effects-interactions pattern
+   ├── Reentrancy guards
+   └── Return value checking
+```
+
+### 3. Cryptographic Security
+
+```
+FHE Layer:
+├── Encryption: FHE.asEuint32()
+├── Access Control: FHE.allowThis(), FHE.allow()
+├── Decryption Request: FHE.requestDecryption()
+├── Signature Verification: FHE.checkSignatures()
+└── Type Conversion: FHE.toBytes32()
+
+Guarantees:
+├── Semantic security (IND-CPA)
+├── Homomorphic operations preserve privacy
+├── No information leakage through ciphertexts
+└── Signature verification prevents tampering
+```
+
+## Gas Optimization Strategy
+
+### 1. HCU (Homomorphic Computation Unit) Optimization
+
+```
+Expensive Operations (High HCU):
+├── FHE.add() - Encrypted addition
+├── FHE.select() - Encrypted conditional
+├── FHE.eq() - Encrypted comparison
+└── FHE.requestDecryption() - Decryption request
+
+Optimization Strategies:
+├── Batch decryption requests where possible
+├── Minimize encrypted comparisons
+├── Use events instead of storage for historical data
+└── Strategic ACL permission grants
+```
+
+### 2. Storage Optimization
+
+```
+Gas-Efficient Patterns:
+├── Pack structs to minimize storage slots
+├── Use mappings over arrays for lookups
+├── Emit events for historical tracking
+├── Delete obsolete data to get gas refunds
+└── Use memory for temporary calculations
+```
+
+### 3. Computation Optimization
+
+```
+Efficient Algorithms:
+├── Single-pass participant processing
+├── Early returns on condition failures
+├── Reuse computed values
+├── Minimize loop iterations
+└── Use pure/view functions where possible
+```
+
+## Event Architecture
+
+### Event Hierarchy
+
+```
+Core Events:
+├── PeriodStarted(period, startTime)
+├── PeriodEnded(period, totalRewards)
+├── TravelSubmitted(participant, period, timeoutDeadline)
+└── RewardsCalculated(period, participant, reward)
+
+Gateway Events:
+├── GatewayApproved(gateway)
+├── GatewayRevoked(gateway)
+├── GatewayFeesWithdrawn(gateway, amount)
+└── DecryptionRequested(requestId, participant, period)
+
+Processing Events:
+├── DecryptionCompleted(requestId, participant, success)
+├── DecryptionFailed(requestId, participant, reason)
+└── RewardsClaimed(participant, amount)
+
+Protection Events:
+├── RefundIssued(participant, period, reason)
+├── TimeoutTriggered(participant, period)
+└── EmergencyPause(paused)
+```
 
 ## Deployment Architecture
 
-### Network Topology
+### Multi-Environment Strategy
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                    Ethereum Network                       │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  ┌──────────────┐    ┌──────────────┐    ┌────────────┐ │
-│  │   Privacy    │    │   Privacy    │    │  Example   │ │
-│  │   Gateway    │◀──▶│  Computation │◀──▶│  Privacy   │ │
-│  │              │    │              │    │    DApp    │ │
-│  └──────┬───────┘    └──────────────┘    └─────┬──────┘ │
-│         │                                      │         │
-└─────────┼──────────────────────────────────────┼─────────┘
-          │                                      │
-          │                                      │
-┌─────────┴──────────────────────────────────────┴─────────┐
-│                    Gateway Network                        │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐           │
-│  │ Gateway  │    │ Gateway  │    │ Gateway  │           │
-│  │    1     │    │    2     │    │    N     │           │
-│  └──────────┘    └──────────┘    └──────────┘           │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
+1. Development (Localhost)
+   ├── Hardhat Network
+   ├── Fast mining
+   ├── Easy debugging
+   └── Mock gateways
+
+2. Testnet (Sepolia)
+   ├── Real network conditions
+   ├── ZAMA FHE testnet integration
+   ├── Public gateway nodes
+   └── Gas profiling
+
+3. Production (Mainnet)
+   ├── Multi-signature owner
+   ├── Multiple approved gateways
+   ├── Conservative timeout settings
+   └── Monitoring & alerting
 ```
 
-### Contract Dependencies
+### Configuration Management
 
 ```
-PrivacyGateway
-├── @openzeppelin/Ownable
-├── @openzeppelin/ReentrancyGuard
-├── @openzeppelin/Pausable
-└── IGatewayCallback (interface)
+Environment Variables:
+├── PRIVATE_KEY - Deployer key
+├── SEPOLIA_RPC_URL - Network endpoint
+├── ETHERSCAN_API_KEY - Verification
+├── GATEWAY_ADDRESSES - Approved gateways
+└── DEFAULT_TIMEOUT - Initial timeout setting
 
-PrivacyComputation
-└── IPrivacyComputation (interface)
-
-ExamplePrivacyDApp
-├── @openzeppelin/Ownable
-├── @openzeppelin/ReentrancyGuard
-├── IGatewayCallback
-├── PrivacyGateway (reference)
-└── PrivacyComputation (reference)
+Contract Parameters:
+├── PERIOD_DURATION - 7 days
+├── MIN_TIMEOUT - 1 hour
+├── MAX_TIMEOUT - 7 days
+├── Reward tiers - Bronze/Silver/Gold
+└── Gateway fee - 0.001 ETH
 ```
 
-## Gas Optimization Strategies
+## Monitoring & Observability
 
-### Storage Optimization
+### Key Metrics to Track
 
-- Use events for non-critical data
-- Pack struct fields efficiently
-- Use bytes32 for request IDs
+```
+Performance Metrics:
+├── Average decryption time
+├── Gateway success rate
+├── Timeout frequency
+└── Gas usage per operation
 
-### Computation Optimization
+Business Metrics:
+├── Active participants per period
+├── Total carbon savings
+├── Reward distribution
+└── Gateway fee accumulation
 
-- Pure functions for privacy computation
-- Modular arithmetic in fixed-size operations
-- Minimal state reads per transaction
+Security Metrics:
+├── Failed decryption attempts
+├── Refund claim rate
+├── Timeout trigger frequency
+└── Unauthorized access attempts
+```
 
-### Call Optimization
+### Event Monitoring
 
-- Batch operations where possible
-- View functions for status checks
-- External calls only when necessary
+```
+Critical Events to Monitor:
+├── DecryptionFailed - Investigate gateway issues
+├── TimeoutTriggered - Check network congestion
+├── RefundIssued - Track user experience
+├── EmergencyPause - Alert on contract issues
+└── Multiple GatewayRevoked - Security concern
+```
+
+## Upgrade Strategy
+
+### Future Enhancements
+
+```
+Planned Upgrades:
+├── Multi-period batch processing
+├── Dynamic reward tiers
+├── Governance for timeout configuration
+├── ERC20 reward token integration
+└── Cross-chain gateway support
+
+Upgrade Pattern:
+├── Use proxy pattern for upgradability
+├── Implement gradual migration
+├── Maintain backward compatibility
+├── Test extensively on testnet
+└── Coordinate with gateway operators
+```
+
+## Conclusion
+
+This architecture provides a robust, privacy-preserving, and fail-safe system for carbon reduction rewards. The combination of FHE encryption, gateway callback patterns, timeout protection, refund mechanisms, and privacy-preserving computation creates a production-ready solution that prioritizes user privacy and data security while maintaining operational efficiency and gas optimization.
+
+Key architectural strengths:
+- **Privacy**: Zero-knowledge proofs throughout
+- **Reliability**: Comprehensive fail-safe mechanisms
+- **Scalability**: Asynchronous processing with multiple gateways
+- **Security**: Multi-layered validation and access control
+- **Efficiency**: Optimized HCU usage and gas consumption
+- **Transparency**: Comprehensive event logging and monitoring
