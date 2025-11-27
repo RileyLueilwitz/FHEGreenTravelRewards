@@ -9,7 +9,7 @@ A blockchain-based incentive system that rewards eco-friendly transportation cho
 [![License](https://img.shields.io/badge/📄_License-MIT-yellow.svg)](LICENSE)
 [![Network](https://img.shields.io/badge/🔗_Network-Sepolia-orange)](https://sepolia.etherscan.io/)
 
-[Video](https://streamable.com/7ttud1)](https://streamable.com/7ttud1)
+[![Video](https://streamable.com/7ttud1)](https://streamable.com/7ttud1)
 
 ---
 
